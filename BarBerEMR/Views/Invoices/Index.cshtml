@@ -1,0 +1,87 @@
+﻿@model IEnumerable<BarBerEMR.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+@*<h1>Invoices</h1>*@
+
+<div id="alert" class="alert alert-success alert-dismissible fade show mt-3 d-none" role="alert">
+    User Deleted.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div id="alerterror" class="alert alert-danger alert-dismissible fade show mt-3 d-none" role="alert">
+    Unable to delete.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-striped m-1">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountWithVat)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.RemainingAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.discount)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Vat)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.InvoiceDate)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.InvoiceDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmountWithVat)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.RemainingAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.discount)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Vat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

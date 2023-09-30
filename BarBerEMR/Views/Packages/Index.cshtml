@@ -1,0 +1,274 @@
+﻿@model IEnumerable<PackagesViewModel>
+
+
+@{
+    ViewBag.Title = "Packages";
+}
+
+<h2>Packages</h2>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Create New
+</button>
+<div id="alert" class="alert alert-success alert-dismissible fade show mt-3 d-none" role="alert">
+    Package added.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div id="alerterror" class="alert alert-danger alert-dismissible fade show mt-3 d-none" role="alert">
+    Unable to addPackage.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<table data-replace="jtable" id="PackagesTable" class="table table-striped m-2" aria-label="JS Datatable" data-locale="en" data-search="true" style="margin-top:10px;">
+
+    <!--<thead id="av" class="table table-striped m-4">-->
+    @*<tr><th>ID</th><th>Package Name </th><th>Package Price </th><th>Operations </th> </tr>*@
+    <!--</thead>-->
+    <tbody>
+    </tbody>
+</table>
+
+
+
+<!-- Modal for ADD Package -->
+@*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">*@
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ِADD Package</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ID" name="ID" class="form-control" /><br />
+                @*<label>ID</label><br />*@
+                <label>Package Name</label><br />
+                <input type="text" id="PackageName" name="PackageName" class="form-control" /><br />
+                <label>Package Price</label><br />
+                <input type="text" id="PackagePrice" name="PackagePrice" class="form-control" /><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="AddPackage" type="button" class="btn btn-primary">ADD Package</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Edit Package -->
+<div class="modal fade" id="EditPackage" tabindex="-1" role="dialog" aria-labelledby="EditPackageLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ِEdit Package</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <input type="hidden" id="NewPackageID" name="NewPackageID" class="form-control hiddenid" /><br />
+                <label>Package Name</label><br />
+                <input type="text" id="NewPackageName" name="NewPackageName" class="form-control" /><br />
+                <input type="text" id="NewPackagePrice" name="NewPackagePrice" class="form-control" /><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="UpdatePackage" type="button" class="btn btn-primary">Update Package</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $("#PackagesTable").empty();
+            GetAllPackages();
+
+        })
+        var tableString = "";
+        $("#AddPackage").click(function (e) {
+            debugger;
+            e.preventDefault();
+            var PackageName = $("#PackageName").val();
+            var PackagePrice = $("#PackagePrice").val();
+            var PackagesViewModel = {
+                PackageName: PackageName,
+                PackagePrice: PackagePrice
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Packages/CreateNewPackage?PackageName=' + PackageName + "&PackagePrice=" + PackagePrice,
+                dataType: "json",
+                success: function (data) {
+                    if (data.messege = "true") {
+                        $('#alert').removeClass('d-none');
+
+                        setTimeout(function () {
+                            $('#alert').addClass('d-none');
+                        }, 3000);
+
+                        $('#exampleModal').modal('hide');
+                        GetAllPackages();
+                        console.log("success");
+                    }
+
+                },
+                error: function (err) {
+                    $('#alerterror').removeClass('d-none');
+                    setTimeout(function () {
+                        $('#alerterror').addClass('d-none');
+                    }, 3000);
+                    //GetAllPackages();
+                    //$('#exampleModal').modal('hide');
+
+                }
+
+            });
+
+
+        });//end of AddPackage click
+        function GetAllPackages() {
+            debugger;
+
+            $.ajax({
+                url: '/Packages/GetAllPackages',
+                type: "GET",
+                dataType: 'json',
+                success: function (res) {
+                    var tableString = "";
+                    $("#PackagesTable").empty();
+                    tableString = '<thead class="table table-striped m-1" ><tr class="bg-primary text-white"><th>ID</th><th>Package Name </th><th>Package Price </th><th>Operations </th> </tr>    </thead>'
+                    $.each(res, function (index, value) {
+                        //    tableString += "<tr><td>" + value.id + "</td><td>" + value.packageName + "</td><td>" + value.packagePrice + "</td><td><button id=" + value.id + ' onClick="DeletePackage(' + value.id + ')" class="btn btn-danger">Delete</button> </td > ' +'</tr>';
+                        tableString += '<tr><td>' + value.id + '</td><td>' + value.packageName + '</td><td>' + value.packagePrice + '</td><td><button id=' + value.id + ' onClick="DeletePackage(' + value.id + ')" class="btn btn-danger">Delete</button>';
+                        tableString += '<button id=' + value.id + ' data-id=' + value.id + ' data-toggle="modal" data-target="#EditPackage" class="btn btn-primary m-2 EditPopUp">Update</button>';
+                        tableString += ' </td > </tr>';
+                    });
+                    $("#PackagesTable").append(tableString);
+                    var tableString = "";
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('Error in Operation');
+                }
+            });
+        }
+        //end of GetAllPackages click
+        function DeletePackage(PackageId) {
+            debugger;
+            $.ajax({
+                url: "/Packages/DeletePackage?id=" + PackageId,
+                type: "Delete",
+                dataType: "json",
+                success: function () {
+                    console.log("delete success");
+                    swal("Done!", "It was succesfully Deleted!", "success");
+
+                    GetAllPackages();
+
+
+
+                },
+
+
+                error: function (err) {
+                    //alert(err);
+                    //swal("Error Deleting!", "Please try again", "error");
+                    //    GetAllPackages();
+                }
+
+            });
+        }
+        //end of DeleteBilDeltials click
+        var PackageId;
+        function GetPackageNameById(BranchID) {
+            debugger;
+            BranchID = BranchID
+            $.ajax({
+                url: "https://localhost:44343/Branches/GetBranchNameById/" + BranchID,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    var res = JSON.parse(data);
+
+
+                    $("#NewBranchName").val(res.BranchName);
+                    $("#NewBranchID").val(res.BranchID);
+
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+
+            });
+        }
+        //end of DeleteBilDeltials click
+        $("#UpdatePackage").click(function (e) {
+            var NewPackageID = $("#NewPackageID").val();
+            var NewPackageName = $("#NewPackageName").val();
+            var NewPackagePrice = $("#NewPackagePrice").val();
+            $.ajax({
+                url: "/Packages/UpdatePackageNameById?id=" + NewPackageID + "&PackageName=" + NewPackageName + "&PackagePrice=" + NewPackagePrice,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.messege = "true") {
+                        swal("Done!", "It was succesfully Updated!", "success");
+                        $('#EditPackage').modal('hide');
+                        GetAllPackages();
+                        console.log("Update success");
+                    }
+                },
+                error: function (err) {
+                    //alert(err);
+                    swal("Error Updating!", "Please try again & Check Data", "error");
+                }
+            });
+        });//end of UpdatePackage click
+        $(document).on("click", ".EditPopUp", function () {
+            var passedID = $(this).data('id');
+            $(".modal-body .hiddenid").val(passedID);
+
+            debugger;
+            var PackageName = $(this).closest('tr').find('td:eq(1)').text();
+            $('#NewPackageName').value = PackageName;
+            var PackagePrice = $(this).closest('tr').find('td:eq(2)').text();
+            $('#NewPackagePrice').value = PackagePrice;
+        });
+        function addAllColumnHeaders(myList) {
+            var columnSet = [];
+            var headerTr$ = $('<tr/>');
+            for (var i = 0; i < myList.length; i++) {
+                var rowHash = myList[i];
+                for (var key in rowHash) {
+                    if ($.inArray(key, columnSet) == -1) {
+
+                        columnSet.push(key);
+                        headerTr$.append($('<th/>').html(key));
+
+                    }
+                }
+            }
+            $("#av").append(headerTr$);
+
+            return columnSet;
+        }
+
+
+    </script>
+}
+
+
+
+

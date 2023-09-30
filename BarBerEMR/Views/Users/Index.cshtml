@@ -1,0 +1,120 @@
+﻿@model IEnumerable<UserViewModel>
+
+@{
+    ViewData["title"] = "Users";
+}
+
+<h1>Users</h1>
+<a asp-action="add" class="btn btn-primary" >Add New</a>
+
+
+<div id="alert" class="alert alert-success alert-dismissible fade show mt-3 d-none" role="alert">
+    User Deleted.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div id="alerterror" class="alert alert-danger alert-dismissible fade show mt-3 d-none" role="alert">
+    Unable to delete.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<table class="table table-striped m-1">
+    <thead>
+        <tr class="bg-primary text-white">
+            @*<th>Id</th>*@
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    @foreach (var user in Model)
+    {
+        <tr>
+            @*<td>@user.Id</td>*@
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@string.Join(" , ",user.Roles.ToList())</td>
+            <td>
+                <a class="btn btn-primary" asp-controller="Users" asp-action="ManageRoles" asp-route-UserId="@user.Id">Roles</a>
+                <a class="btn btn-outline-primary" asp-controller="Users" asp-action="Edit" asp-route-UserId="@user.Id">Profile</a>
+                <a href="javascript:;" class="btn btn-danger js-delete" data-id="@user.Id">Delete </a>
+            </td>
+        </tr>
+    }
+</table>
+@section Scripts {
+    @*<partial name="_ValidationScriptsPartial" />*@
+<script>
+/*const { ready } = require("jquery");*/
+
+    $(document).ready(function () {
+
+        $('.js-delete').on('click', function () {
+
+            var btn = $(this);
+
+            bootbox.confirm({
+                message: 'Are you want to delete this user?',
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-secondary'
+                    }
+                },
+                callback: function (result) {
+                //    console.log('This was logged in the callback: ' + result);
+                    if (result) {
+                        $.ajax({
+                            
+                            url: '/api/Users/?userid=' + btn.data('id'),
+                            method: 'Delete',
+                            success: function () {
+                                btn.parents('tr').fadeOut();
+                            //    alert('Success to delete user');
+                                $('#alert').removeClass('d-none');
+
+                                setTimeout(function () {
+                                    $('#alert').addClass('d-none');
+                                }, 3000);
+                            },
+                            error: function () {
+                                //alert('Something went wrong while Deleting');
+                                $('#alerterror').removeClass('d-none');
+
+                                setTimeout(function () {
+                                    $('#alerterror').addClass('d-none');
+                                }, 3000);
+                                
+
+                            }
+
+
+                        });
+                    }
+                }
+            });
+
+
+
+
+
+
+
+            //var result = confirm('Are you want to delete this user?');
+            //if (result) {
+            //    console.log(btn.data('id'));
+            //}
+
+        });
+    });
+
+</script>
+}

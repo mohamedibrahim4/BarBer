@@ -1,0 +1,101 @@
+﻿
+<div class="modal fade" id="DeleteData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">حذف البيانات</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="container mt-5">
+                            <div class="alert alert-danger hide" role="alert">
+                                يرجي إستكمال البيانات
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label for="Name">إسم المدرسة</label>
+                                                    <input type='text' maxlength='100' tabindex='1' id='Name' class='form-control' />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label for="Email">
+                                                        البريد الإلكتروني التابع للمدرسة
+                                                    </label>
+                                                    <input type='email' maxlength='100' tabindex='3' id='Email' class='form-control' />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <div class='mb-3'>
+                                                        <label for="Phone">
+                                                            الهاتف الأساسى للمدرسة
+                                                        </label>
+                                                        <input type='text' maxlength='20' tabindex='4' id='Phone' class='form-control' />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label for="Description">
+                                                        وصف المدرسة
+                                                    </label>
+                                                    <textarea maxlength='500' tabindex='5' id="Description" class='form-control'></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label for="link">
+                                                        عنوان التواصل الاجتماعى
+                                                    </label>
+                                                    <input type='text' maxlength='100' id='link' tabindex='2' class='form-control' />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12">
+                                                <div class="mb-3 text-center">
+                                                    <input type="image" src="" id="Logo" alt="Image" class="imgFile img-thumbnail" />
+                                                    <form id="FormLogo" method="post" enctype="multipart/form-data">
+                                                        <label for="LogoFile" class="btn btn-outline-secondary d-block" tabindex='6'><i class="fa-solid fa-file-import"></i></label>
+                                                        <label id="FileName" class="control-label"></label>
+                                                        <input type="file" name="LogoFile" maxlength='50' id="LogoFile" tabindex='6' class="form-control btn btn-default file hide" accept="image/x-png,image/jpg,image/jpeg" />
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label for="Active" class="col-form-label">مفعل</label>
+                                                    <div class="form-check form-switch">
+                                                        <input type="checkbox" id="Active" tabindex='7' class="form-check-input">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" tabindex='8' onclick="Save()">حفظ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="ConfirmDelete()">حذف</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            </div>
+        </div>
+    </div>
+</div>

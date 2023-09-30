@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\Platf\OneDrive\Desktop\BarBerPublish</_PublishTargetUrl>
+    <History>True|2023-06-01T06:32:38.1833367Z;True|2023-06-01T10:27:46.5061413+04:00;</History>
+  </PropertyGroup>
+</Project>
